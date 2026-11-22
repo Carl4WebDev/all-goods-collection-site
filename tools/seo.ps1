@@ -18,6 +18,7 @@ $pages = @(
   @{ f="tees.html";          url="tees.html";          type="CollectionPage"; crumbs=@(@("Shop","shop.html"),@("Tees","tees.html")); pri="0.8" }
   @{ f="outerwear.html";     url="outerwear.html";     type="CollectionPage"; crumbs=@(@("Shop","shop.html"),@("Outerwear","outerwear.html")); pri="0.8" }
   @{ f="bags.html";          url="bags.html";          type="CollectionPage"; crumbs=@(@("Shop","shop.html"),@("Bags","bags.html")); pri="0.8" }
+  @{ f="gallery.html";       url="gallery.html";       type="ImageGallery";   crumbs=@(,@("Gallery","gallery.html")); pri="0.7" }
   @{ f="about.html";         url="about.html";         type="AboutPage";      crumbs=@(,@("About","about.html")); pri="0.7" }
   @{ f="service-areas.html"; url="service-areas.html"; type="WebPage";        crumbs=@(,@("Service Areas","service-areas.html")); pri="0.7" }
   @{ f="contact.html";       url="contact.html";       type="ContactPage";    crumbs=@(,@("Contact","contact.html")); pri="0.7" }
@@ -30,6 +31,13 @@ function Get-Text([string]$html) {
 }
 function Esc([string]$s) { return [System.Net.WebUtility]::HtmlEncode($s) }
 
+# gallery photos: <a href="full.jpg"><img src="thumb.jpg" ... alt="caption">
+function Get-Photos([string]$html) {
+  [regex]::Matches($html, '<figure class="shot"><a href="([^"]+)"><img src="([^"]+)"[^>]*alt="([^"]*)"') | ForEach-Object {
+    [pscustomobject]@{ full=$_.Groups[1].Value; thumb=$_.Groups[2].Value; alt=[System.Net.WebUtility]::HtmlDecode($_.Groups[3].Value) }
+  }
+}
+
 function New-Store {
   $cats = @("Caps","Tees","Outerwear","Bags") | ForEach-Object {
     [ordered]@{ "@type"="OfferCatalog"; name=$_; url="${BaseUrl}$($_.ToLower()).html" }
@@ -41,8 +49,7 @@ function New-Store {
     alternateName = "All Goods Cllctn"
     description = "Owner-run streetwear shop in Prk. Orchids, Brgy. Paquibato, Davao City selling Japan-surplus caps, tees, jackets, hoodies and bags. Any 3 items for ${PESO}999. Orders through Messenger; GCash accepted."
     url = $BaseUrl
-    logo = "${BaseUrl}icon-512.png"
-    image = $OG_IMAGE
+    logo = "${BaseUrl}icon-512.png"; image = @($OG_IMAGE, "${BaseUrl}images/photos/stall-front.jpg", "${BaseUrl}images/photos/cap-wall.jpg")
     telephone = "+639317348736"
     address = [ordered]@{ "@type"="PostalAddress"; streetAddress="Prk. Orchids, Brgy. Paquibato"; addressLocality="Davao City"; addressRegion="Davao del Sur"; addressCountry="PH" }
     areaServed = @(
@@ -85,6 +92,12 @@ function New-Graph($p, [string]$html, [string]$title, [string]$desc) {
   }
   if ($p.type -eq "AboutPage") { $webPage.mainEntity = @{ "@id"=$STORE_ID } }
   if ($p.type -eq "ContactPage") { $webPage.mainEntity = @{ "@id"=$STORE_ID } }
+  $photos = @(Get-Photos $html)
+  if ($photos.Count -gt 0) {
+    $webPage.image = @($photos | ForEach-Object {
+      [ordered]@{ "@type"="ImageObject"; contentUrl="${BaseUrl}$($_.full)"; thumbnailUrl="${BaseUrl}$($_.thumb)"; caption=$_.alt; creditText="All Goods Collection"; copyrightNotice="All Goods Collection" }
+    })
+  }
   [void]$graph.Add($webPage)
 
   $faqs = [regex]::Matches($html, '<details><summary>(.*?)</summary><div class="ans">(.*?)</div></details>', 'Singleline')
@@ -122,7 +135,7 @@ foreach ($p in $pages) {
 <meta property="og:url" content="$pageUrl"><meta property="og:title" content="$(Esc $title)"><meta property="og:description" content="$(Esc $desc)">
 <meta property="og:image" content="$OG_IMAGE"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta property="og:image:alt" content="All Goods Collection: streetwear in Davao City, any 3 items for ${PESO}999">
 <meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="$(Esc $title)"><meta name="twitter:description" content="$(Esc $desc)"><meta name="twitter:image" content="$OG_IMAGE">
-<link rel="icon" href="favicon.svg" type="image/svg+xml"><link rel="icon" href="favicon-32.png" sizes="32x32" type="image/png"><link rel="apple-touch-icon" href="apple-touch-icon.png"><link rel="manifest" href="site.webmanifest">
+<link rel="icon" href="favicon-32.png" sizes="32x32" type="image/png"><link rel="icon" href="favicon-48.png" sizes="48x48" type="image/png"><link rel="apple-touch-icon" href="apple-touch-icon.png"><link rel="manifest" href="site.webmanifest">
 <link rel="sitemap" type="application/xml" href="sitemap.xml">
 <script type="application/ld+json">$json</script>
 <!-- /seo -->
@@ -133,8 +146,12 @@ foreach ($p in $pages) {
 }
 
 # sitemap.xml
-$urls = ($pages | ForEach-Object { "  <url><loc>${BaseUrl}$($_.url)</loc><lastmod>$LastMod</lastmod><priority>$($_.pri)</priority></url>" }) -join "`n"
-[System.IO.File]::WriteAllText((Join-Path $Root "sitemap.xml"), "<?xml version=`"1.0`" encoding=`"UTF-8`"?>`n<urlset xmlns=`"http://www.sitemaps.org/schemas/sitemap/0.9`">`n$urls`n</urlset>`n", $utf8)
+$urls = ($pages | ForEach-Object {
+  $pageHtml = [System.IO.File]::ReadAllText((Join-Path $Root $_.f), $utf8)
+  $imgs = (@(Get-Photos $pageHtml) | ForEach-Object { "<image:image><image:loc>${BaseUrl}$($_.full)</image:loc></image:image>" }) -join ""
+  "  <url><loc>${BaseUrl}$($_.url)</loc><lastmod>$LastMod</lastmod><priority>$($_.pri)</priority>$imgs</url>"
+}) -join "`n"
+[System.IO.File]::WriteAllText((Join-Path $Root "sitemap.xml"), "<?xml version=`"1.0`" encoding=`"UTF-8`"?>`n<urlset xmlns=`"http://www.sitemaps.org/schemas/sitemap/0.9`" xmlns:image=`"http://www.google.com/schemas/sitemap-image/1.1`">`n$urls`n</urlset>`n", $utf8)
 
 # robots.txt
 [System.IO.File]::WriteAllText((Join-Path $Root "robots.txt"), "User-agent: *`nAllow: /`n`nSitemap: ${BaseUrl}sitemap.xml`n", $utf8)

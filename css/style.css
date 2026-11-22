@@ -232,3 +232,26 @@ p{margin:0 0 1em;max-width:68ch}
  html{scroll-behavior:auto}
  .cursor{display:none}
 }
+/* Gallery */
+.gallery{display:grid;gap:18px;grid-template-columns:repeat(auto-fill,minmax(min(100%,260px),1fr));margin-top:30px}
+.gallery:empty::before{content:"New photos coming soon. Check our Facebook page for the latest drops.";display:block;color:var(--mute);border:1px dashed var(--line);border-radius:var(--r);padding:28px;text-align:center}
+.bone .gallery:empty::before{color:#5e574b;border-color:var(--bone2)}
+.shot{margin:0;border-radius:var(--r);overflow:hidden;border:1px solid var(--line);background:var(--blk2);position:relative}
+.bone .shot{border-color:var(--bone2);background:#fffdf8}
+.shot a{display:block;cursor:zoom-in}
+.shot img{display:block;width:100%;height:auto;transition:transform .6s var(--ease)}
+.shot:hover img{transform:scale(1.04)}
+.gallery .shot img{aspect-ratio:4/5;object-fit:cover}
+.shot figcaption{padding:10px 14px;font-size:14px;color:var(--mute)}
+.bone .shot figcaption{color:#5e574b}
+.lightbox{border:0;padding:0;background:transparent;max-width:min(92vw,1100px);max-height:92vh;overflow:visible}
+.lightbox::backdrop{background:rgba(12,11,10,.92)}
+.lightbox img{display:block;max-width:100%;max-height:82vh;margin:auto;border-radius:12px}
+.lightbox .lb-cap{color:var(--ink);text-align:center;margin:12px 0 0}
+.lightbox .lb-close{position:absolute;top:-18px;right:-18px;width:44px;height:44px;border-radius:50%;border:0;background:var(--gold);color:#0c0b0a;font-size:28px;line-height:1;cursor:pointer}
+/* Photo strips on content pages */
+.photos{display:grid;gap:14px;grid-template-columns:repeat(auto-fill,minmax(min(100%,190px),1fr));margin-top:30px}
+.split>.photos,.two>.photos{grid-column:1/-1}
+.photos .shot{margin:0}
+.photos .shot img{aspect-ratio:1;object-fit:cover}
+.photos .shot figcaption{display:none}

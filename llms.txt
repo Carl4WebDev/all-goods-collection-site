@@ -25,6 +25,7 @@ Key facts:
 - [Tees](https://carl4webdev.github.io/all-goods-collection-site/tees.html): graphic and logo tees and fit
 - [Outerwear](https://carl4webdev.github.io/all-goods-collection-site/outerwear.html): jackets and hoodies
 - [Bags](https://carl4webdev.github.io/all-goods-collection-site/bags.html): sling and crossbody bags
+- [Gallery](https://carl4webdev.github.io/all-goods-collection-site/gallery.html): photos of past drops and buyers with their fits
 - [About](https://carl4webdev.github.io/all-goods-collection-site/about.html): the shop and its owner
 - [Service Areas](https://carl4webdev.github.io/all-goods-collection-site/service-areas.html): Paquibato, Davao City and beyond
 - [Contact](https://carl4webdev.github.io/all-goods-collection-site/contact.html): Messenger, phone and order form

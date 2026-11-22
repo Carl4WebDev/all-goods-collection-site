@@ -159,3 +159,25 @@
   /* Footer year */
   document.querySelectorAll('[data-year]').forEach(el => { el.textContent = new Date().getFullYear(); });
 }
+
+/* Gallery lightbox */
+{
+  const box = document.querySelector('.lightbox');
+  if (box && typeof box.showModal === 'function') {
+    const img = box.querySelector('img');
+    const cap = box.querySelector('.lb-cap');
+    document.addEventListener('click', e => {
+      const a = e.target.closest('.shot a');
+      if (!a) return;
+      e.preventDefault();
+      const thumb = a.querySelector('img');
+      img.src = a.href;
+      img.alt = thumb ? thumb.alt : '';
+      cap.textContent = img.alt;
+      box.showModal();
+    });
+    box.querySelector('.lb-close').addEventListener('click', () => box.close());
+    box.addEventListener('click', e => { if (e.target === box) box.close(); });
+    box.addEventListener('close', () => { img.removeAttribute('src'); });
+  }
+}
