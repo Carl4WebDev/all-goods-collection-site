@@ -1,0 +1,30 @@
+# All Goods Collection
+
+> Owner-run streetwear shop in Prk. Orchids, Brgy. Paquibato, Davao City, Philippines. Sells Japan-surplus caps, tees, jackets, hoodies and bags. Any 3 items for ₱999. Orders through Facebook Messenger; payment by GCash.
+
+Key facts:
+
+- Name: All Goods Collection (also "All Goods Cllctn")
+- Owner: Wenzly James, who picks the pieces and handles every order
+- Location: small stall in Prk. Orchids, Brgy. Paquibato, Davao City. Walk-ins welcome; message before visiting to check stock.
+- Products: fitted caps, snapbacks, graphic and logo tees, jackets, hoodies, sling and crossbody bags. Most pieces are one of a kind.
+- Deal: any 3 items for ₱999 (promos can change; confirm when ordering)
+- Payment: GCash, sent only after item and pickup details are agreed
+- Delivery: pickup at the stall; meet-ups or shipping elsewhere in Davao City by request
+- Hours: open daily
+- Messenger: https://m.me/ZCllctnss
+- Phone: +63 931 734 8736
+- Facebook: https://www.facebook.com/ZCllctnss
+- Instagram: https://www.instagram.com/w1nsloy_/
+
+## Pages
+
+- [Home](https://carl4webdev.github.io/all-goods-collection-site/): overview, the 3-for-₱999 deal and FAQ
+- [Shop](https://carl4webdev.github.io/all-goods-collection-site/shop.html): all categories and how to order
+- [Caps](https://carl4webdev.github.io/all-goods-collection-site/caps.html): fitted caps, snapbacks and sizing
+- [Tees](https://carl4webdev.github.io/all-goods-collection-site/tees.html): graphic and logo tees and fit
+- [Outerwear](https://carl4webdev.github.io/all-goods-collection-site/outerwear.html): jackets and hoodies
+- [Bags](https://carl4webdev.github.io/all-goods-collection-site/bags.html): sling and crossbody bags
+- [About](https://carl4webdev.github.io/all-goods-collection-site/about.html): the shop and its owner
+- [Service Areas](https://carl4webdev.github.io/all-goods-collection-site/service-areas.html): Paquibato, Davao City and beyond
+- [Contact](https://carl4webdev.github.io/all-goods-collection-site/contact.html): Messenger, phone and order form

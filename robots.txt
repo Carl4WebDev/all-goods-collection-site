@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://carl4webdev.github.io/all-goods-collection-site/sitemap.xml
